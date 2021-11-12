@@ -68,14 +68,16 @@ public class MainActivity extends AppCompatActivity {
     {
         // NOTE: WE CAN SIMPLIFY EVERYTHING ELSE BELOW USING THE CUSTOM CLASS NetworkAPI
         // I still need to have a map that containing data that we want to send to the server.
-        Map<String, String> requestFormDataMap = new HashMap<>(); // (8)
+        // Request body was mover here
+        Map<String, String> requestFormDataMap = new HashMap<>();
         requestFormDataMap.put("DATA", binding.activityMainMessageEdittext.getText().toString());
-        requestFormDataMap.put("LOGIN_NAME", "Dino Paolo Villanueva"); // hardcoding for now. We will add shared preferences where we can retrieve a login name as a property of a shared preference. This will be moved to a common class called network API where we can use lots of this code. We will use a class that in this demo is called NetworkAPI
+        requestFormDataMap.put("LOGIN_NAME", "Dvillanueva");// hardcoding for now. We will add shared preferences where we can retrieve a login name as a property of a shared preference. This will be moved to a common class called network API where we can use lots of this code. We will use a class that in this demo is called NetworkAPI
+        // End of Request body
         NetworkAPI networkAPI = new NetworkAPI(); // create an instance of NetworkAPI
-            final String urlString = "https://capstone1.app.dmitcapstone.ca/api/jitters/JitterServlet"; // hardcoding the URL for now that we're gonna post to if we have time we will retrieve this from a shared preference.
+        final String urlString = "https://capstone1.app.dmitcapstone.ca/api/jitters/JitterServlet";// hardcoding the URL for now that we're gonna post to if we have time we will retrieve this from a shared preference.
             // A Java 8 class called Completable Future can help fix the network exception error. see line 42 for the cause of the error for more details
-            CompletableFuture<Void> postDataFuture = CompletableFuture.runAsync(() -> { // run the task aysnchronously, and don't wait for results
-                int responseCode = networkAPI.postFormData(urlString, requestFormDataMap); // move this blocks of code to the CompletableFuture code block
+        CompletableFuture<Void> postDataFuture = CompletableFuture.runAsync(() -> { // run the task aysnchronously, and don't wait for results
+            int responseCode = networkAPI.postFormData(urlString, requestFormDataMap); // move this blocks of code to the CompletableFuture code block
 //                if (responseCode == HttpURLConnection.HTTP_OK) --> borrowing this block of code because we will be using this in our handleMessage code block
 //                {
 //                    Toast.makeText(this, "Send Message was successful", Toast.LENGTH_SHORT).show();
@@ -86,11 +88,11 @@ public class MainActivity extends AppCompatActivity {
 //                    String message = String.format("Error sending with code %d", responseCode);
 //                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 //                }
-                Message msg = postDataHandler.obtainMessage();
-                Bundle bundle = new Bundle();
-                bundle.putInt(KEY_RESPONSE_CODE, responseCode);
-                msg.setData(bundle);
-                postDataHandler.sendMessage(msg); // to avoid missing internet permission exception error go to the manifest and add the internet permissions <uses-permission android:name="android.permission.INTERNET" />
+            Message msg = postDataHandler.obtainMessage();
+            Bundle bundle = new Bundle();
+            bundle.putInt(KEY_RESPONSE_CODE, responseCode);
+            msg.setData(bundle);
+            postDataHandler.sendMessage(msg); // to avoid missing internet permission exception error go to the manifest and add the internet permissions <uses-permission android:name="android.permission.INTERNET" />
             });
 //            int responseCode = networkAPI.postFormData(urlString,  requestFormDataMap); // move this blocks of code to the CompletableFuture code block
 //            if (responseCode == HttpURLConnection.HTTP_OK)

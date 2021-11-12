@@ -6,8 +6,8 @@ android {
     compileSdk 31
 
     // View Binding Step 1
-    buildFeatures{
-        viewBinding = true;
+    buildFeatures {
+        viewBinding true
     }
 
     defaultConfig {
